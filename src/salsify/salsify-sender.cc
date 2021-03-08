@@ -58,6 +58,7 @@ using namespace std;
 using namespace std::chrono;
 using namespace PollerShortNames;
 
+double my_custom_target_bitrate = .1 * 1000000; // Mbits
 class AverageEncodingTime
 {
 private:
@@ -137,14 +138,14 @@ EncodeOutput do_encode_job( EncodeJob && encode_job )
 
   switch ( encode_job.mode ) {
   case CONSTANT_QUANTIZER:
-    output = encode_job.encoder.encode_with_quantizer( encode_job.raster.get(),
-                                                       encode_job.y_ac_qi );
-    quantizer_in_use = encode_job.y_ac_qi;
-    break;
+    //output = encode_job.encoder.encode_with_quantizer( encode_job.raster.get(),
+    //                                                   encode_job.y_ac_qi );
+    //quantizer_in_use = encode_job.y_ac_qi;
+    //break;
 
   case TARGET_FRAME_SIZE:
     output = encode_job.encoder.encode_with_target_size( encode_job.raster.get(),
-                                                         encode_job.target_size );
+                                                         my_custom_target_bitrate);
     break;
 
   default:
@@ -210,12 +211,13 @@ int main( int argc, char *argv[] )
     { "device",        required_argument, nullptr, 'd' },
     { "pixfmt",        required_argument, nullptr, 'p' },
     { "update-rate",   required_argument, nullptr, 'u' },
+    { "target-size", required_argument, nullptr, 's'},
     { "log-mem-usage", no_argument,       nullptr, 'M' },
     { 0, 0, 0, 0 }
   };
 
   while ( true ) {
-    const int opt = getopt_long( argc, argv, "d:p:m:u:", command_line_options, nullptr );
+    const int opt = getopt_long( argc, argv, "d:p:m:u:s:", command_line_options, nullptr );
 
     if ( opt == -1 ) { break; }
 
@@ -241,6 +243,10 @@ int main( int argc, char *argv[] )
 
     case 'M':
       log_mem_usage = true;
+      break;
+      
+    case 's':
+      my_custom_target_bitrate = stof(optarg);
       break;
 
     default:
