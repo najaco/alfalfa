@@ -15,7 +15,6 @@
 #include "encoder.hh"
 #include "camera.hh"
 
-
 using namespace std;
 
 class InTimeEncoder
@@ -34,17 +33,17 @@ private:
 
 public:
   InTimeEncoder(const string &camera_device, const string &pixel_format, const size_t target_size) : camera_device(camera_device), pixel_format(pixel_format), target_size(target_size), encoded_frames(queue<vector<uint8_t>>()), frames_mtx() {}
-  
+
   void setTargetSize(const size_t target_size)
   {
     this->target_size.store(target_size, std::memory_order_relaxed);
   }
-  
+
   size_t getTargetSize()
   {
     return target_size.load(std::memory_order_relaxed);
   }
-  
+
   vector<uint8_t> get_frame(bool pop_frame = false)
   {
     lock_guard<std::mutex> lock(frames_mtx);
@@ -59,7 +58,7 @@ public:
     }
     return frame;
   }
-  
+
   int run()
   {
     // Pacer pacer;
@@ -100,7 +99,8 @@ public:
   }
 };
 
-int main(){
+int main()
+{
   printf("Hello World\n");
   exit(0);
 }
