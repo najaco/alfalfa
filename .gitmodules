@@ -1,3 +1,7 @@
 [submodule "alfalfa_test_vectors"]
 	path = alfalfa_test_vectors
 	url = https://github.com/excamera/alfalfa_test_vectors
+[submodule "pybind11"]
+	path = pybind11
+	url = https://github.com/pybind/pybind11.git
+	branch = stable

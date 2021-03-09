@@ -11,9 +11,11 @@
 #include <queue>
 #include <atomic>
 
-#include "yuv4mpeg.hh"
+// #include "yuv4mpeg.hh"
 #include "encoder.hh"
 #include "camera.hh"
+
+#include <pybind11/pybind11.h>
 
 using namespace std;
 
@@ -98,6 +100,17 @@ public:
     return EXIT_FAILURE;
   }
 };
+
+PYBIND11_MODULE(in_time_encoder, m){
+  m.doc() = "pybind11 bindings for InTimeEncoder";
+  pybind11::class_<InTimeEncoder>(m, "InTimeEncoder")
+    .def(pybind11::init<const std::string &, const std::string &, const size_t>())
+    .def("setTargetSize", &InTimeEncoder::setTargetSize)
+    .def("getTargetSize", &InTimeEncoder::getTargetSize)
+    .def("getFrame", &InTimeEncoder::get_frame)
+    .def("run", &InTimeEncoder::run);
+}
+
 
 int main()
 {
