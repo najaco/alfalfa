@@ -1,32 +1,20 @@
-#include <getopt.h>
+// #include <getopt.h>
 
 #include <cstdlib>
 #include <iostream>
 #include <chrono>
 #include <vector>
-#include <random>
 #include <limits>
 #include <thread>
 #include <future>
 #include <algorithm>
-#include <unordered_map>
-#include <iomanip>
-#include <cmath>
 #include <queue>
 #include <atomic>
 
-#include "exception.hh"
-#include "finally.hh"
-#include "paranoid.hh"
 #include "yuv4mpeg.hh"
 #include "encoder.hh"
-#include "socket.hh"
-#include "packet.hh"
-#include "poller.hh"
-#include "socketpair.hh"
 #include "camera.hh"
-#include "pacer.hh"
-#include "procinfo.hh"
+
 
 using namespace std;
 
