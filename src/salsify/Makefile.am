@@ -8,7 +8,7 @@ if BUILDVP8PLAY
 VP8PLAY_BUILD += salsify-receiver real-webcam display-jpeg
 endif
 
-bin_PROGRAMS = salsify-sender fake-webcam $(VP8PLAY_BUILD)
+bin_PROGRAMS = salsify-sender fake-webcam in_time_encoder $(VP8PLAY_BUILD)
 
 salsify_sender_SOURCES = salsify-sender.cc
 salsify_sender_LDADD = ../net/libnet.a ../encoder/libalfalfaencoder.a $(BASE_LDADD)
@@ -31,3 +31,7 @@ display_jpeg_SOURCES = display-jpeg.cc
 display_jpeg_CPPFLAGS = $(AM_CPPFLAGS) $(GLU_CFLAGS) $(GLEW_CFLAGS) $(GLFW3_CFLAGS)
 display_jpeg_LDADD = ../display/libalfalfadisplay.a ../net/libnet.a $(BASE_LDADD) $(GLU_LIBS) $(GLEW_LIBS) $(GLFW3_LIBS)
 display_jpeg_LDFLAGS =
+
+in_time_encoder_SOURCES = in_time_encoder.cc
+in_time_encoder_LDADD = ../net/libnet.a ../encoder/libalfalfaencoder.a $(BASE_LDADD)
+in_time_encoder_LDFLAGS = -pthread

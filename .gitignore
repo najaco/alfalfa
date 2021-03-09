@@ -49,6 +49,8 @@ Makefile.in
 /src/salsify/fake-webcam
 /src/salsify/real-webcam
 /src/salsify/display-jpeg
+/src/salsify/in_time_encoder
+
 
 /src/tests/decode-to-stdout
 /src/tests/encode-loopback
