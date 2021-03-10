@@ -1,5 +1,5 @@
 AM_CPPFLAGS = -I$(srcdir)/../util -I$(srcdir)/../decoder -I$(srcdir)/../display -I$(srcdir)/../input -I$(srcdir)/../encoder -I$(srcdir)/../net $(X264_CFLAGS) $(CXX11_FLAGS)
-AM_CXXFLAGS = $(PICKY_CXXFLAGS) $(NODEBUG_CXXFLAGS) -I/usr/include/python3.8 -lpython3.8
+AM_CXXFLAGS = $(PICKY_CXXFLAGS) $(NODEBUG_CXXFLAGS)
 AM_LDFLAGS = $(STATIC_BUILD_FLAG)
 BASE_LDADD = ../input/libalfalfainput.a ../decoder/libalfalfadecoder.a ../util/libalfalfautil.a $(X264_LIBS) $(JPEG_LIBS)
 
@@ -8,7 +8,7 @@ if BUILDVP8PLAY
 VP8PLAY_BUILD += salsify-receiver real-webcam display-jpeg
 endif
 
-bin_PROGRAMS = salsify-sender fake-webcam in_time_encoder $(VP8PLAY_BUILD)
+bin_PROGRAMS = salsify-sender fake-webcam $(VP8PLAY_BUILD) in_time_encoder
 
 salsify_sender_SOURCES = salsify-sender.cc
 salsify_sender_LDADD = ../net/libnet.a ../encoder/libalfalfaencoder.a $(BASE_LDADD)
@@ -32,6 +32,14 @@ display_jpeg_CPPFLAGS = $(AM_CPPFLAGS) $(GLU_CFLAGS) $(GLEW_CFLAGS) $(GLFW3_CFLA
 display_jpeg_LDADD = ../display/libalfalfadisplay.a ../net/libnet.a $(BASE_LDADD) $(GLU_LIBS) $(GLEW_LIBS) $(GLFW3_LIBS)
 display_jpeg_LDFLAGS =
 
+PYTHON3_CONFIG_CF = -I/usr/include/python3.8 -I/usr/include/python3.8  -Wno-unused-result -Wsign-compare -g -fdebug-prefix-map=/build/python3.8-wRPQXs/python3.8-3.8.5=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector -Wformat -Werror=format-security  -DNDEBUG -g -fwrapv -O3 -Wall
+PYTHON3_CONFIG_LD = -L/usr/lib/python3.8/config-3.8-x86_64-linux-gnu -L/usr/lib  -lcrypt -lpthread -ldl  -lutil -lm -lm
+
+
 in_time_encoder_SOURCES = in_time_encoder.cc
+# in_time_encoder_CXXFLAGS = -O3 -Wall -shared -std=c++11  -fPIC  $(AM_CXXFLAGS)
+in_time_encoder_CXXFLAGS = -Wall -shared -std=c++14 -fPIC 
+in_time_encoder_CPPFLAGS = $(AM_CPPFLAGS) $(PYTHON3_CONFIG_CF) -I/home/nathan/.local/lib/python3.8/site-packages/pybind11/include
 in_time_encoder_LDADD = ../net/libnet.a ../encoder/libalfalfaencoder.a $(BASE_LDADD)
-in_time_encoder_LDFLAGS = -pthread
+in_time_encoder_LDFLAGS = $(STATIC_BUILD_FLAG) $(PYTHON3_CONFIG_LD)
+

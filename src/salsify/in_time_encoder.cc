@@ -14,9 +14,9 @@
 // #include "yuv4mpeg.hh"
 #include "encoder.hh"
 #include "camera.hh"
-#if __has_include("pybind11/pybind11.h")
-  #include <pybind11/pybind11.h>
-#endif
+// #if __has_include("pybind11/pybind11.h")
+#include <pybind11/pybind11.h>
+// #endif
 using namespace std;
 
 class InTimeEncoder
@@ -100,21 +100,23 @@ public:
     return EXIT_FAILURE;
   }
 };
-bool test(){
-  return true;
+int test()
+{
+  return 1;
 }
-#if __has_include("pybind11/pybind11.h")
-PYBIND11_MODULE(in_time_encoder, m){
+// #if __has_include("pybind11/pybind11.h")
+PYBIND11_MODULE(in_time_encoder, m)
+{
   m.doc() = "pybind11 bindings for InTimeEncoder";
   pybind11::class_<InTimeEncoder>(m, "InTimeEncoder")
-    .def(pybind11::init<const std::string &, const std::string &, const size_t>())
-    .def("setTargetSize", &InTimeEncoder::setTargetSize)
-    .def("getTargetSize", &InTimeEncoder::getTargetSize)
-    .def("getFrame", &InTimeEncoder::get_frame)
-    .def("run", &InTimeEncoder::run);
+      .def(pybind11::init<const std::string &, const std::string &, const size_t>())
+      .def("setTargetSize", &InTimeEncoder::setTargetSize)
+      .def("getTargetSize", &InTimeEncoder::getTargetSize)
+      .def("getFrame", &InTimeEncoder::get_frame)
+      .def("run", &InTimeEncoder::run);
   m.def("test", &test, "Tests if functions load properly");
 }
-#endif
+// #endif
 
 int main()
 {

@@ -117,7 +117,7 @@ void display_task( const VP8Raster & example_raster, bool fullscreen )
 
 void enqueue_frame( FramePlayer & player, const Chunk & frame )
 {
-  static int frame_no = 0;
+  // static int frame_no = 0;
   if ( frame.size() == 0 ) {
     return;
   }

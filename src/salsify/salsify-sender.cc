@@ -409,18 +409,18 @@ int main(int argc, char *argv[])
   Pacer pacer;
 
   /* get connection_id */
-  const uint16_t connection_id = paranoid::stoul(argv[optind + 2]);
+  // const uint16_t connection_id = paranoid::stoul(argv[optind + 2]);
 
   /* average inter-packet delay, reported by receiver */
-  uint32_t avg_delay = numeric_limits<uint32_t>::max();
+  // uint32_t avg_delay = numeric_limits<uint32_t>::max();
 
   /* keep the number of fragments per frame */
   vector<uint64_t> cumulative_fpf;
-  uint64_t last_acked = numeric_limits<uint64_t>::max();
+  // uint64_t last_acked = numeric_limits<uint64_t>::max();
 
   /* maximum number of frames to be skipped in a row */
-  const size_t MAX_SKIPPED = 3;
-  size_t skipped_count = 0;
+  // const size_t MAX_SKIPPED = 3;
+  // size_t skipped_count = 0;
 
   if (not PIXEL_FORMAT_STRS.count(pixel_format))
   {
