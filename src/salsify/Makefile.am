@@ -8,7 +8,7 @@ if BUILDVP8PLAY
 VP8PLAY_BUILD += salsify-receiver real-webcam display-jpeg
 endif
 
-bin_PROGRAMS = salsify-sender fake-webcam $(VP8PLAY_BUILD) in_time_encoder
+bin_PROGRAMS = salsify-sender fake-webcam $(VP8PLAY_BUILD) #in_time_encoder
 
 salsify_sender_SOURCES = salsify-sender.cc
 salsify_sender_LDADD = ../net/libnet.a ../encoder/libalfalfaencoder.a $(BASE_LDADD)
@@ -33,13 +33,13 @@ display_jpeg_LDADD = ../display/libalfalfadisplay.a ../net/libnet.a $(BASE_LDADD
 display_jpeg_LDFLAGS =
 
 PYTHON3_CONFIG_CF = -I/usr/include/python3.8 -I/usr/include/python3.8  -Wno-unused-result -Wsign-compare -g -fdebug-prefix-map=/build/python3.8-wRPQXs/python3.8-3.8.5=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector -Wformat -Werror=format-security  -DNDEBUG -g -fwrapv -O3 -Wall
-PYTHON3_CONFIG_LD = -L/usr/lib/python3.8/config-3.8-x86_64-linux-gnu -L/usr/lib  -lcrypt -lpthread -ldl  -lutil -lm -lm
+PYTHON3_CONFIG_LD = -L/usr/lib/python3.8/config-3.8-x86_64-linux-gnu -L/usr/lib -lpython3.8 -lcrypt -lpthread -ldl  -lutil -lm -lm
 
 
-in_time_encoder_SOURCES = in_time_encoder.cc
-# in_time_encoder_CXXFLAGS = -O3 -Wall -shared -std=c++11  -fPIC  $(AM_CXXFLAGS)
-in_time_encoder_CXXFLAGS = -Wall -shared -std=c++14 -fPIC 
-in_time_encoder_CPPFLAGS = $(AM_CPPFLAGS) $(PYTHON3_CONFIG_CF) -I/home/nathan/.local/lib/python3.8/site-packages/pybind11/include
-in_time_encoder_LDADD = ../net/libnet.a ../encoder/libalfalfaencoder.a $(BASE_LDADD)
-in_time_encoder_LDFLAGS = $(STATIC_BUILD_FLAG) $(PYTHON3_CONFIG_LD)
+# in_time_encoder_SOURCES = in_time_encoder.cc
+# # in_time_encoder_CXXFLAGS = -O3 -Wall -shared -std=c++11  -fPIC  $(AM_CXXFLAGS)
+# in_time_encoder_CXXFLAGS = -Wall -shared -std=c++14 -fPIC -fPIE -pie
+# in_time_encoder_CPPFLAGS = $(AM_CPPFLAGS) $(PYTHON3_CONFIG_CF) -I/home/nathan/.local/lib/python3.8/site-packages/pybind11/include
+# in_time_encoder_LDADD = ../net/libnet.a ../encoder/libalfalfaencoder.a $(BASE_LDADD) $(PYTHON3_CONFIG_LD)
+# in_time_encoder_LDFLAGS = $(STATIC_BUILD_FLAG)
 

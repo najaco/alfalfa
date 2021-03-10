@@ -63,7 +63,7 @@ public:
 
   int run()
   {
-    // Pacer pacer;
+
     vector<uint64_t> cumulative_fpf;
     if (not PIXEL_FORMAT_STRS.count(pixel_format))
     {
@@ -117,9 +117,6 @@ PYBIND11_MODULE(in_time_encoder, m)
   m.def("test", &test, "Tests if functions load properly");
 }
 // #endif
-
-int main()
-{
-  printf("Hello World\n");
-  exit(0);
-}
+// int main(){
+//   return 0;
+// }
