@@ -49,6 +49,8 @@ Makefile.in
 /src/salsify/fake-webcam
 /src/salsify/real-webcam
 /src/salsify/display-jpeg
+/src/salsify/in_time_encoder
+
 
 /src/tests/decode-to-stdout
 /src/tests/encode-loopback
@@ -63,3 +65,6 @@ Makefile.in
 /src/tests/encoder_test_vectors/
 /src/tests/encoder_output/
 /src/tests/convergence_test/
+src/.vscode/
+in_time_encoder.cpython-38-x86_64-linux-gnu.so
+salsify_sender.cpython-38-x86_64-linux-gnu.so

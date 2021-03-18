@@ -52,6 +52,7 @@ using namespace std;
 using namespace std::chrono;
 using namespace PollerShortNames;
 
+
 class AverageInterPacketDelay
 {
 private:
@@ -116,10 +117,13 @@ void display_task( const VP8Raster & example_raster, bool fullscreen )
 
 void enqueue_frame( FramePlayer & player, const Chunk & frame )
 {
+  // static int frame_no = 0;
   if ( frame.size() == 0 ) {
     return;
   }
 
+  //cerr << "Size of frame is " << frame.size()  << " bytes or " << frame.size() * 8 << " bits" << endl;
+  // cerr << frame.size() << endl;
   const Optional<RasterHandle> raster = player.decode( frame );
 
   async( launch::async,
