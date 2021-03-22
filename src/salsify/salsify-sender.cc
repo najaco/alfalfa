@@ -802,11 +802,24 @@ private:
   uint16_t port_no;
   uint16_t connection_id;
   atomic_size_t targeted_size;
+  size_t update_rate;
+  OperationMode operation_mode;
 
 public:
-  SalsifySender(const string &camera_device, const string &pixel_format, const string &ipaddr, uint16_t port_no, uint16_t connection_id, size_t initial_target_size = 100000) : camera_device(camera_device), pixel_format(pixel_format), ipaddr(ipaddr), port_no(port_no), connection_id(connection_id), targeted_size(initial_target_size)
+  SalsifySender(const string &camera_device, const string &pixel_format, const string &ipaddr, uint16_t port_no, uint16_t connection_id, size_t initial_target_size = 100000, size_t update_rate = 1, const string &operation_mode_str = "conventional") : camera_device(camera_device), pixel_format(pixel_format), ipaddr(ipaddr), port_no(port_no), connection_id(connection_id), targeted_size(initial_target_size), update_rate(update_rate), operation_mode()
   {
-    // this->targeted_size.store(initial_target_size);
+    if (operation_mode_str == "S1" || operation_mode_str == "s1")
+    {
+      this->operation_mode = OperationMode::S1;
+    }
+    else if (operation_mode_str == "S2" || operation_mode_str == "s2")
+    {
+      this->operation_mode = OperationMode::S2;
+    }
+    else
+    {
+      this->operation_mode = OperationMode::Conventional;
+    }
   }
   void set_target_size(size_t n)
   {
@@ -822,8 +835,6 @@ public:
     pybind11::gil_scoped_release release{};
 #endif
     /* camera settings */
-    size_t update_rate __attribute__((unused)) = 1;
-    OperationMode operation_mode = OperationMode::S2;
     bool log_mem_usage = false;
 
     /* construct Socket for outgoing datagrams */
@@ -890,7 +901,7 @@ public:
     system_clock::time_point conservative_until = system_clock::now();
 
     /* for 'conventional codec' mode */
-    duration<long int, std::nano> cc_update_interval{(update_rate == 0) ? 0 : std::nano::den / update_rate};
+    duration<long int, std::nano> cc_update_interval{(this->update_rate == 0) ? 0 : std::nano::den / this->update_rate};
     system_clock::time_point next_cc_update = system_clock::now() + cc_update_interval;
     size_t cc_quantizer = 32;
     size_t cc_rate = 0;
@@ -1077,14 +1088,14 @@ public:
                                                                 cc_quantizer, this->targeted_size.load());
                                        // this thread will spawn all the encoding jobs and will wait on the results
                                        thread(
-                                           [&encode_jobs, &encode_outputs, &encode_end_pipe, operation_mode]() {
+                                           [&encode_jobs, &encode_outputs, &encode_end_pipe, this]() {
                                              encode_outputs.clear();
                                              encode_outputs.reserve(encode_jobs.size());
 
                                              for (auto &job : encode_jobs)
                                              {
                                                encode_outputs.push_back(
-                                                   async(((operation_mode == OperationMode::S2) ? launch::async : launch::deferred),
+                                                   async(((this->operation_mode == OperationMode::S2) ? launch::async : launch::deferred),
                                                          do_encode_job, move(job)));
                                              }
 
@@ -1144,7 +1155,7 @@ public:
                                          }
                                        }
 
-                                       if (operation_mode == OperationMode::Conventional)
+                                       if (this->operation_mode == OperationMode::Conventional)
                                        {
                                          best_output_index = 0; /* always send the frame */
                                        }
@@ -1308,16 +1319,14 @@ public:
 
     return EXIT_FAILURE;
   }
-
 };
-
 
 #if __has_include("pybind11/pybind11.h")
 PYBIND11_MODULE(salsify_sender, m)
 {
   m.doc() = "pybind11 class bindings for salsify-sender";
   pybind11::class_<SalsifySender>(m, "SalsifySender")
-      .def(pybind11::init<const std::string &, const std::string &, const std::string &, uint16_t, uint16_t, size_t>())
+      .def(pybind11::init<const std::string &, const std::string &, const std::string &, uint16_t, uint16_t, size_t, size_t, std::string &>())
       .def("run", &SalsifySender::run, "Run method of salsify-sender")
       .def("set_target_size", &SalsifySender::set_target_size, "Sets target bitrate")
       .def("get_target_size", &SalsifySender::get_target_size, "Gets target bitrate");
