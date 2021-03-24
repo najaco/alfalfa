@@ -1221,16 +1221,16 @@ public:
 
                                        last_sent = system_clock::now();
 
-                                       /* cerr << "["
-           << duration_cast<milliseconds>( last_sent.time_since_epoch() ).count()
-           << "] "
-           << "Frame " << frame_no << ": " << output.job_name
-           << " (" << to_string( output.y_ac_qi ) << ") = "
-           << ff.fragments_in_this_frame() << " fragments ("
-           << avg_encoding_time.int_value()/1000 << " ms, ssim="
-           << output.encoder.stats().ssim.get_or( -1.0 )
-           << ") {" << output.source_minihash << " -> " << target_minihash << "}"
-           << " intersend_delay = " << inter_send_delay << " us"; */
+                                       cerr << "["
+                                            << duration_cast<milliseconds>(last_sent.time_since_epoch()).count()
+                                            << "] "
+                                            << "Frame " << frame_no << ": " << output.job_name
+                                            << " (" << to_string(output.y_ac_qi) << ") = "
+                                            << ff.fragments_in_this_frame() << " fragments ("
+                                            << avg_encoding_time.int_value() / 1000 << " ms, ssim="
+                                            << output.encoder.stats().ssim.get_or(-1.0)
+                                            << ") {" << output.source_minihash << " -> " << target_minihash << "}"
+                                            << " intersend_delay = " << inter_send_delay << " us";
 
                                        if (log_mem_usage and next_mem_usage_report < last_sent)
                                        {
@@ -1238,7 +1238,7 @@ public:
                                          next_mem_usage_report = last_sent + 5s;
                                        }
 
-                                       // cerr << "\n";
+                                       cerr << "\n";
 
                                        cumulative_fpf.push_back((frame_no > 0)
                                                                     ? (cumulative_fpf[frame_no - 1] + ff.fragments_in_this_frame())
